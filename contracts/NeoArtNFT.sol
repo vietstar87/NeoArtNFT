@@ -11,7 +11,9 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
 
-    mapping (uint256 => TokenMeta) private _tokenMeta;
+    mapping(uint256 => TokenMeta) private _tokenMeta;
+
+    address private _feeAddress;
 
     struct TokenMeta {
         uint256 id;
@@ -25,14 +27,15 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
         OwnableUpgradeable.__Ownable_init();
         ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
         ERC721Upgradeable.__ERC721_init("NeoArt NFT", "NeoArtNft");
+        _feeAddress = msg.sender;
     }
 
-    function getAllOnSale () public view virtual returns( TokenMeta[] memory ) {
+    function getAllOnSale() public view virtual returns (TokenMeta[] memory) {
         TokenMeta[] memory tokensOnSale = new TokenMeta[](_tokenIds.current());
         uint256 counter = 0;
 
-        for(uint i = 1; i < _tokenIds.current() + 1; i++) {
-            if(_tokenMeta[i].sale == true) {
+        for (uint i = 1; i < _tokenIds.current() + 1; i++) {
+            if (_tokenMeta[i].sale == true) {
                 tokensOnSale[counter] = _tokenMeta[i];
                 counter++;
             }
@@ -117,14 +120,14 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
     }
 
     function mintCollectable(
-        address _owner, 
-        string memory _tokenURI, 
-        string memory _name, 
-        uint256 _price, 
+        address _owner,
+        string memory _tokenURI,
+        string memory _name,
+        uint256 _price,
         bool _sale
     )
-        public
-        returns (uint256)
+    public
+    returns (uint256)
     {
         require(_price > 0);
 
