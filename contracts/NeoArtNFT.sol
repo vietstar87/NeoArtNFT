@@ -124,7 +124,6 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
         bool _sale
     )
         public
-        onlyOwner
         returns (uint256)
     {
         require(_price > 0);
