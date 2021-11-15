@@ -21,6 +21,7 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
         string name;
         string uri;
         bool sale;
+        address creator;
     }
 
     function initialize() public initializer {
@@ -136,7 +137,7 @@ contract NeoArtNFT is ERC721Upgradeable, OwnableUpgradeable, ReentrancyGuardUpgr
         uint256 newItemId = _tokenIds.current();
         _mint(_owner, newItemId);
 
-        TokenMeta memory meta = TokenMeta(newItemId, _price, _name, _tokenURI, _sale);
+        TokenMeta memory meta = TokenMeta(newItemId, _price, _name, _tokenURI, _sale, msg.sender);
         _setTokenMeta(newItemId, meta);
 
         return newItemId;
