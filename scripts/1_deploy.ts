@@ -3,21 +3,26 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import {ethers, upgrades } from "hardhat";
-
+import { ethers, upgrades } from "hardhat";
 
 async function main() {
-    const NeoArtNft = await ethers.getContractFactory("NeoArtNFT");
-    const nft = await upgrades.deployProxy(NeoArtNft);
-    await nft.deployed();
-    console.log('NFT address',nft.address)
+  // const NeoArtNft = await ethers.getContractFactory("NeoArtNFT");
+  // const nft = await upgrades.deployProxy(NeoArtNft);
+  // await nft.deployed();
+
+  const NeoArtNft = await ethers.getContractFactory("NeoArtNFT");
+  const nft = await upgrades.upgradeProxy(
+    "0xc7b14fC263A82f9Be5922eBFB73B3DcfafD45B79",
+    NeoArtNft
+  );
+  console.log("NFT address", nft.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error);
-        process.exit(1);
-    });
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
